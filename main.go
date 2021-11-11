@@ -95,7 +95,7 @@ func (b *Bot) CreateCrowler(name string) string {
 	return fmt.Sprintf(`%s
 Профессия: %s
 Оружие: %s
-Вещи: %s
+Имущество: %s
 %s
 	`, name, crowler.Class, weapon, crowler.Things, GetRandomStats())
 }
@@ -135,7 +135,7 @@ func NewDB() *SQLite {
 func (db *SQLite) GetClass() (*Crowler, error) {
 	tmp := &Crowler{}
 	rand.Seed(time.Now().UnixNano())
-	rnd := 1 + rand.Intn(99)
+	rnd := (1 + rand.Intn(99) + 1 + rand.Intn(99)) / 2
 
 	err := db.Get(tmp, "SELECT name,weapon_id, weapon_title,things FROM occupations WHERE id = $1", rnd)
 	if err != nil {
