@@ -100,9 +100,24 @@ func (b *Bot) CreateCrowler(name string) string {
 	`, name, crowler.Class, weapon, crowler.Things, GetRandomStats())
 }
 
-func GetRandomStats() string {
+func rollOneStat() int {
+	var (
+		dice []int
+		min  int = 100
+		stat int
+	)
 	rand.Seed(time.Now().UnixNano())
+	dice = append(dice, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1)
+	for _, i := range dice {
+		if i < min {
+			min = i
+		}
+		stat += i
+	}
+	return stat - min
+}
 
+func GetRandomStats() string {
 	return fmt.Sprintf(`Характеристики
 Сила:  %d
 Стойкость: %d
@@ -110,7 +125,7 @@ func GetRandomStats() string {
 Мудрость: %d
 Интеллект %d
 Харизма: %d
-	`, 3+rand.Intn(15), 3+rand.Intn(15), 3+rand.Intn(15), 3+rand.Intn(15), 3+rand.Intn(15), 3+rand.Intn(15))
+	`, rollOneStat(), rollOneStat(), rollOneStat(), rollOneStat(), rollOneStat(), rollOneStat())
 }
 
 // -------------------------------------------------------------------------------------------
@@ -135,7 +150,7 @@ func NewDB() *SQLite {
 func (db *SQLite) GetClass() (*Crowler, error) {
 	tmp := &Crowler{}
 	rand.Seed(time.Now().UnixNano())
-	rnd := (1 + rand.Intn(99) + 1 + rand.Intn(99)) / 2
+	rnd := 1 + (rand.Intn(99)+rand.Intn(99))/2
 
 	err := db.Get(tmp, "SELECT name,weapon_id, weapon_title,things FROM occupations WHERE id = $1", rnd)
 	if err != nil {
