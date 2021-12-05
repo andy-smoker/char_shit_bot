@@ -3,7 +3,7 @@ pipeline {
 
     stages
     {
-            srage("build") {
+        stage("build") {
             steps {
                 go build -o run main.go
             }
