@@ -26,7 +26,7 @@ type Weapon struct {
 
 func CreateCrowler(name string, db *repository.DCCdb) string {
 	rand.Seed(time.Now().UnixNano())
-	rnd := 1 + (rand.Intn(99)+rand.Intn(99))/2
+	rnd := 1 + rand.Intn(100)
 	crowler, err := db.GetClass(rnd)
 	if err != nil {
 		log.Println(err)
@@ -61,27 +61,29 @@ func CreateCrowler(name string, db *repository.DCCdb) string {
 Оружие: %s
 Имущество: %s
 %s
-	`, name, crowler.Class, weapon, crowler.Things, GetRandomStats())
+	`, name, crowler.Class, weapon, crowler.Things, getRandomStats())
 }
 
 func rollOneStat() int {
 	var (
-		dice []int
+		// dice []int
 		min  int = 100
 		stat int
 	)
+	//dice = append(dice, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1)
 	rand.Seed(time.Now().UnixNano())
-	dice = append(dice, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1)
-	for _, i := range dice {
+	for i := 0; i < 4; i++ {
+		tmp := rand.Intn(6) + 1
+		time.Sleep(time.Nanosecond * 19)
 		if i < min {
-			min = i
+			min = tmp
 		}
-		stat += i
+		stat += tmp
 	}
 	return stat - min
 }
 
-func GetRandomStats() string {
+func getRandomStats() string {
 	return fmt.Sprintf(`Характеристики
 Сила:  %d
 Стойкость: %d
