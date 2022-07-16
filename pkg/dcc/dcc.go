@@ -67,7 +67,6 @@ func CreateCrowler(name string, db *repository.DCCdb) string {
 func rollOneStat() int {
 	var (
 		// dice []int
-		min  int = 100
 		stat int
 	)
 	//dice = append(dice, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1, rand.Intn(5)+1)
@@ -75,12 +74,12 @@ func rollOneStat() int {
 	for i := 0; i < 4; i++ {
 		tmp := rand.Intn(6) + 1
 		time.Sleep(time.Nanosecond * 19)
-		if i < min {
-			min = tmp
-		}
+		// if i < min {
+		// 	min = tmp
+		// }
 		stat += tmp
 	}
-	return stat - min
+	return stat
 }
 
 func getRandomStats() string {
